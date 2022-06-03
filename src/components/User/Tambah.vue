@@ -70,7 +70,7 @@ export default {
             this.$router.push('/') 
         }
         
-        this.axios.get('http://localhost:8000/api/outlet', { headers : { 'Authorization' : `Bearer ` + this.$store.state.token} })
+        this.axios.get(`http://localhost:8000/api/outlet`, { headers : { 'Authorization' : 'Bearer ' + this.$store.state.token} })
                   .then(res => {
                       this.outlet = res.data.data
                   })
@@ -78,7 +78,7 @@ export default {
     },
     methods : {
         tambah() {
-            this.axios.post('http://localhost:8000/api/user', this.user, { headers : { 'Authorization' : `Bearer ` + this.$store.state.token} })
+            this.axios.post(`http://localhost:8000/api/user`, this.user, { headers : { 'Authorization' : 'Bearer ' + this.$store.state.token} })
                       .then( (res) => {
                           if(res.data.success) {
                               this.$swal("Sukses", res.data.message, "success")

@@ -44,12 +44,12 @@
 <span v-if="t.dibayar == 'dibayar'" class="badge bg-info text-light">Di Bayar</span>
 <span v-if="t.dibayar == 'belum_dibayar'" class="badge bg-warning text-dark">Belum Dibayar</span>
 </td>
-<td>{{ t.nama_member }}</td>
+<td>{{ t.nama_user }}</td>
 <td>
 <router-link class="btn btn-success btn-circle mr-1" :to="{ name : 'detailtransaksi', params : {id : t.id_transaksi}}">
 <i class="far fa-eye"></i>
 </router-link>
-<router-link class="btn btn-warning btn-circle mr-1" :to="{ name : 'edittransaksi', params : {id : t.id_transaksi}}">
+<router-link v-if="t.dibayar == 'belum_dibayar'" class="btn btn-warning btn-circle mr-1" :to="{ name : 'edittransaksi', params : {id : t.id_transaksi}}">
 <i class="fas fa-pen"></i>
 </router-link>
 </td>

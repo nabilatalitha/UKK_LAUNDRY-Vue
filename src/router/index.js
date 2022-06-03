@@ -117,7 +117,7 @@ const routes = [
         }
     },
     {
-        path: '/transaksi/edit/id',
+        path: '/transaksi/edit/:id',
         name: 'edittransaksi',
         component: EditTransaksi,
         meta : {

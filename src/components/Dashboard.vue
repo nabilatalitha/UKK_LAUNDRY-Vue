@@ -8,7 +8,7 @@
 <div class="container-fluid">
 <!-- Page Heading -->
 <h1>Dashboard</h1>
-<h1 class="h4 mb-4 text-gray-800">Selamat datang, {{ nama_user }}</h1>
+<h1 class="h3 mb-4 text-gray-800">Selamat datang {{user}}</h1>
 
 <div class="row">
 <!-- Jumlah member -->

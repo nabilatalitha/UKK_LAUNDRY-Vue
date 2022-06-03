@@ -61,9 +61,15 @@ export default {
         }
     },
     created() {
-        this.axios.get('http://127.0.0.1:8000/api/paket',
-                        {
-                            headers : { Authorization : "Bearer " + this.$store.state.token}
+        var data = JSON.parse(this.$store.state.datauser)
+        var role = data.role
+        if(role == 'kasir' || role == 'owner')
+        {
+            this.$swal("Anda tidak dapat mengakses halaman ini")
+            this.$router.push('/') 
+        }
+        
+        this.axios.get('http://127.0.0.1:8000/api/paket', { headers : { Authorization : "Bearer " + this.$store.state.token}
                         })
                     .then(res => {
                         this.paket = res.data.data

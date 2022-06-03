@@ -10,7 +10,7 @@
                         <div class="col-lg-8">
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Tambah Data User</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Edit Data User</h6>
                                 </div>
                                 <div class="card-body">
                                     <form @submit.prevent="edit">
@@ -64,31 +64,46 @@ export default {
     created() {
         var data = JSON.parse(this.$store.state.datauser)
         var role = data.role
-        if(role == 'kasir' || role == 'owner')
+        console.log(data)
+
+        if (role == 'kasir' || role == 'owner')
         {
-            this.$swal("Anda tidak dapat mengakses halaman ini")
+            this.$swal("Error","Anda tidak dapat mengakses halaman ini","error")
             this.$router.push('/') 
         }
-        
-        this.axios.get(`http://localhost:8000/api/user/${this.$route.params.id}`, { headers : { 'Authorization' : `Bearer ` + this.$store.state.token} })
-                  .then(res => {
-                      this.user = res.data.data.users
-                  })
-                  .catch(err => console.log(err))
-        this.axios.get('http://localhost:8000/api/outlet', { headers : { 'Authorization' : `Bearer ` + this.$store.state.token} })
-                  .then(res => {
-                      this.outlet = res.data.data
-                  })
-                  .catch(err => console.log(err))
+
+        this.axios.get(`http://localhost:8000/api/user/${this.$route.params.id}`, {
+            headers : { 'Authorization' : `Bearer ` + this.$store.state.token}
+        })
+        .then( res => {
+            console.log(res.data)
+            this.user = res.data
+        })
+        .catch(err => console.log(err))
+
+        this.axios.get('http://localhost:8000/api/outlet', {
+            headers : { 'Authorization' : `Bearer` + this.$store.state.token}
+        })
+        .then( res => {
+            this.outlet = res.data.data
+            // console.log(res.data)
+        })
+        .catch(err => console.log(err))
+    
     },
     methods : {
         edit() {
-            this.axios.put(`http://localhost:8000/api/user/${this.$route.params.id}`, this.user, { headers : { 'Authorization' : `Bearer ` + this.$store.state.token} })
-                      .then( () => {
-                          this.$router.push('/user');
+            this.axios.put(`http://localhost:8000/api/user/${this.$route.params.id}`, this.user, { 
+                headers : { 'Authorization' : `Bearer ` + this.$store.state.token} 
+                })
+                      .then((res) => {
+                          if(res.data.success) {
+                              this.$swal("Sukses", res.data.message, "success")
+                              this.$router.push('/user');
+                          }
                       })
-                      .catch( err => console.log(err))
+                      .catch(err => console.log(err))
         }
-    } 
+    }
 }
 </script>

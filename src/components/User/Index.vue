@@ -36,7 +36,7 @@
                                                     <td>{{ u.nama_outlet }}</td>
                                                     <td>
                                                        <router-link class="btn btn-warning btn-circle" :to="{ name : 'edituser' , params : { id : u.id_user } }"><i class="fas fa-pen"></i></router-link>
-                                                       <button type="button" @click="hapus(u.id)" class="btn btn-danger btn-circle"><i class="fas fa-trash"></i></button>
+                                                       <button type="button" @click="hapus(u.id_user)" class="btn btn-danger btn-circle"><i class="fas fa-trash"></i></button>
                                                    </td>
                                                 </tr>
                                             </tbody>
@@ -63,27 +63,49 @@ export default {
     created() {
         var data = JSON.parse(this.$store.state.datauser)
         var role = data.role
+
         if(role == 'kasir' || role == 'owner')
         {
             this.$swal("Error","Anda tidak dapat mengakses halaman ini","error")
             this.$router.push('/') 
         }
-        
-        this.axios.get('http://localhost:8000/api/user', { headers : { 'Authorization' : 'Bearer ' + this.$store.state.token} })
+        this.axios.get(`http://localhost:8000/api/user`, { headers : { 
+                    'Authorization' : 'Bearer ' + this.$store.state.token} })
                   .then(res => {
-                      this.user = res.data.data
+                      this.user = res.data
                   })
                   .catch(err => console.log(err))
     },
-    methods : {
-        hapus(id) {
-            this.axios.delete(`http://localhost:8000/api/user/${id}`, { headers : { 'Authorization' : 'Bearer ' + this.$store.state.token} })
-                      .then(() => {
-                          let i = this.user.map(item => item.id).indexOf(id);
-                          this.user.splice(i, 1)
-                      })
-                      .catch(err => console.log(err))
-        }
+         methods : {
+       hapus(id_user) {
+        this.$swal.fire({
+                title : 'Anda yakin ingin menghapus data?',
+                icon : 'warning',
+                showCancelButton : true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Batal'
+              }).then((res)=>{
+                if (res.value) {
+                this.axios.delete(`http://localhost:8000/api/user/${id_user}`, { 
+                    headers: { 'Authorization': 'Bearer ' + this.$store.state.token } })
+        .then((res) => {
+          if (res.data.success) {
+            let i = this.user.map(item => item.id_user).indexOf(id_user);
+            this.user.splice(i, 1)
+            this.$swal("Sukses", res.data.message, "success")
+          }
+        })
+        .catch(() => {
+          this.$swal("Gagal", "Gagal menghapus data user", "error")
+        })
+      }
+              })
+      
+        
+            }
+
     }
 }
 </script>

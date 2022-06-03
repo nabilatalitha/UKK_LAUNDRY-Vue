@@ -17,7 +17,7 @@
 <label>Member</label>
 <select v-model="transaksi.id_member" class="form-control">
 <option v-for="(m, index) in member" :key="index" :value="m.id_member">
-{{ m.nama }}
+{{ m.nama_member }}
 </option>
 </select>
 </div>
@@ -51,16 +51,17 @@ export default {
             this.$swal("Error","Anda tidak dapat mengakses halaman ini","error")
             this.$router.push('/')
         }
-    this.axios.get('http://localhost:8000/api/member', {headers : { Authorization : 'Bearer ' + this.$store.state.token}} )
+    this.axios.get('http://localhost:8000/api/member', {headers : { Authorization : 'Bearer ' + this.$store.state.token} 
+    })
     .then( (res) => {
-        console.log(res.data.data.member)
-        this.member = res.data.data.member
+        this.member = res.data.data
     })
     .catch(err => console.log(err))
 
     this.axios.get(`http://localhost:8000/api/transaksi/${this.$route.params.id}`, {
             headers: { Authorization: 'Bearer ' + this.$store.state.token }
         }).then(res => {
+            
             this.transaksi = res.data
         }).catch(err => console.log(err))
     },
@@ -69,7 +70,7 @@ export default {
         this.axios.put(`http://localhost:8000/api/transaksi/${this.$route.params.id}`,
         this.transaksi,
         {headers : {Authorization : 'Bearer ' + this.$store.state.token}} )
-        .then( (res) => {
+        .then((res) => {
             console.log(res)
              if(res.data.success) {
                 this.$swal("Sukses", res.data.message, "success")
